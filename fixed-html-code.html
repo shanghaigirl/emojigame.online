@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      EmojiRiddles - Guess Movies, Books and Phrases from Emoji Combinations
+    </title>
+    <meta
+      name="description"
+      content="Test your knowledge by guessing movies, books, and famous phrases from emoji combinations. Fun for all ages!"
+    />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎭</text></svg>"
+      type="image/svg+xml"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #4361ee;
+        --primary-light: #5e7afc;
+        --primary-dark: #3a56e0;
+        --accent: #7209b7;
+        --accent-light: #8a2be2;
+        --background: #111827;
+        --background-light: #1f2937;
+        --background-lighter: #374151;
+        --text: #f9fafb;
+        --text-muted: #9ca3af;
+        --border: #4b5563;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --success: #10b981;
+        --warning: #f59e0b;
+        --error: #ef4444;
+        --glow: rgba(67, 97, 238, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--primary-light);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: var(--primary);
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .header {
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--border);
+        background-color: var(--background);
+      }
+
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .logo-icon {
+        font-size: 2rem;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .nav {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        color: var(--text);
+        position: relative;
+        padding: 0.5rem 0;
+      }
+
+      .nav-link:hover {
+        color: var(--primary-light);
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        transition: width 0.3s;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        color: white;
+        box-shadow: 0 4px 6px var(--shadow);
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 6px 8px var(--shadow);
+        transform: translateY(-2px);
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary-light);
+      }
+
+      .btn-outline:hover {
+        background: rgba(67, 97, 238, 0.1);
+      }
+
+      .hero {
+        padding: 6rem 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(
+          circle at center,
+          #2a3b8f 0%,
+          var(--background) 70%
+        );
+      }
+
+      .blob {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        border-radius: 43% 57% 70% 30% / 38% 45% 55% 62%;
+        background: linear-gradient(45deg, var(--primary-dark), var(--accent));
+        opacity: 0.2;
+        filter: blur(30px);
+        z-index: -1;
+        animation: blob-animation 20s linear infinite;
+      }
+
+      .blob-1 {
+        top: 0;
+        right: 0;
+        transform: translate(30%, -30%);
+      }
+
+      .blob-2 {
+        bottom: 0;
+        left: 0;
+        transform: translate(-30%, 30%);
+        animation-delay: -10s;
+      }
+
+      @keyframes blob-animation {
+        0% {
+          border-radius: 43% 57% 70% 30% / 38% 45% 55% 62%;
+        }
+        25% {
+          border-radius: 57% 43% 30% 70% / 55% 62% 38% 45%;
+        }
+        50% {
+          border-radius: 30% 70% 57% 43% / 62% 38% 45% 55%;
+        }
+        75% {
+          border-radius: 70% 30% 43% 57% / 45% 55% 62% 38%;
+        }
+        100% {
+          border-radius: 43% 57% 70% 30% / 38% 45% 55% 62%;
+        }
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+        color: var(--text);
+      }
+
+      .hero-description {
+        max-width: 800px;
+        margin: 0 auto 2.5rem;
+        font-size: 1.25rem;
+        color: var(--text-muted);
+      }
+
+      .section {
+        padding: 5rem 0;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2.5rem;
+        text-align: center;
+        color: var(--text);
+      }
+
+      /* Riddle styles */
+      .riddle-container {
+        max-width: 100%;
+        margin: 0 auto 3rem;
+        background-color: var(--background-light);
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px var(--shadow);
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+
+      .riddle {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border);
+        transition: background-color 0.3s;
+      }
+
+      .riddle:last-child {
+        border-bottom: none;
+      }
+
+      .riddle:hover {
+        background-color: var(--background-lighter);
+      }
+
+      .riddle-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .riddle-number {
+        font-weight: 700;
+        font-size: 1.25rem;
+        min-width: 2.5rem;
+        color: var(--primary-light);
+      }
+
+      .riddle-emoji {
+        font-size: 2rem;
+        letter-spacing: 0.5rem;
+        margin-right: 1.5rem;
+        flex-grow: 1;
+      }
+
+      .riddle-category {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        background-color: var(--background-lighter);
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+      }
+
+      .riddle-content {
+        padding-left: 2.5rem;
+      }
+
+      .riddle-hint {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+      }
+
+      .riddle-answer {
+        background-color: var(--background-lighter);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+        display: none;
+        border-left: 3px solid var(--primary);
+      }
+
+      .reveal-btn {
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .reveal-btn:hover {
+        box-shadow: 0 2px 4px var(--shadow);
+        transform: translateY(-1px);
+      }
+
+      /* Filter buttons */
+      .filter-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+      }
+
+      .filter-buttons {
+        display: flex;
+        background: var(--background-light);
+        border-radius: 0.5rem;
+        padding: 0.25rem;
+        border: 1px solid var(--border);
+      }
+
+      .filter-btn {
+        background: transparent;
+        border: none;
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.3s;
+        border-radius: 0.25rem;
+      }
+
+      .filter-btn.active {
+        background-color: var(--primary);
+        color: white;
+      }
+
+      .filter-btn:hover:not(.active) {
+        background-color: var(--background-lighter);
+        color: var(--text);
+      }
+
+      /* Media Queries */
+      @media (max-width: 768px) {
+        .header-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .nav {
+          gap: 1rem;
+          font-size: 0.875rem;
+        }
+
+        .hero-title {
+          font-size: 2.5rem;
+        }
+
+        .hero-description {
+          font-size: 1rem;
+        }
+
+        .riddle-emoji {
+          font-size: 1.5rem;
+          letter-spacing: 0.25rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .filter-buttons {
+          flex-wrap: wrap;
+        }
+
+        .filter-btn {
+          flex: 1 0 auto;
+          padding: 0.5rem 0.75rem;
+          font-size: 0.875rem;
+        }
+
+        .riddle-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .riddle-emoji {
+          margin-bottom: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header-container">
+        <div class="logo">
+          <span class="logo-icon">🎭</span>
+          <span class="logo-text">EmojiRiddles</span>
+        </div>
+
+        <nav class="nav">
+          <a href="#riddles" class="nav-link">Riddles</a>
+          <a href="#categories" class="nav-link">Categories</a>
+          <a href="#how-to-play" class="nav-link">How to Play</a>
+          <a href="#create" class="nav-link">Create</a>
+        </nav>
+
+        <div class="buttons">
+          <a href="#login" class="btn btn-outline">Log In</a>
+          <a href="#register" class="btn btn-primary">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+
+      <div class="container">
+        <h1 class="hero-title">Welcome to<br />EmojiRiddles!</h1>
+        <p class="hero-description">
+          Test your knowledge by guessing famous movies, books, phrases, and
+          more from emoji combinations. It's fun, challenging, and perfect for
+          all ages!
+        </p>
+
+        <div class="buttons">
+          <a href="#riddles" class="btn btn-primary">Start Playing</a>
+          <a href="#how-to-play" class="btn btn-outline">How to Play</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="riddles" class="section">
+      <div class="container">
+        <h2 class="section-title">Emoji Riddles Challenge</h2>
+
+        <div class="filter-container">
+          <div class="filter-buttons">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Movies</button>
+            <button class="filter-btn">Books</button>
+            <button class="filter-btn">Phrases</button>
+            <button class="filter-btn">Songs</button>
+          </div>
+        </div>
+
+        <div class="riddle-container">
+          <!-- Riddle 1 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">1</div>
+              <div class="riddle-emoji">⚪ 🪷 🏝️ 🔪</div>
+              <div class="riddle-category">TV Show</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer1')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer1">The White Lotus</div>
+            </div>
+          </div>
+
+          <!-- Riddle 2 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">2</div>
+              <div class="riddle-emoji">🦑 🎮 💰 🏆</div>
+              <div class="riddle-category">TV Show</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer2')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer2">Squid Game</div>
+            </div>
+          </div>
+
+          <!-- Riddle 3 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">3</div>
+              <div class="riddle-emoji">🤖 🦾 🧠 👁️</div>
+              <div class="riddle-category">Game</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer3')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer3">Cyberpunk 2077</div>
+            </div>
+          </div>
+
+          <!-- Riddle 4 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">4</div>
+              <div class="riddle-emoji">👶 🥬 👽 🚀</div>
+              <div class="riddle-category">TV Show</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer4')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer4">
+                Baby Yoda (The Mandalorian)
+              </div>
+            </div>
+          </div>
+
+          <!-- Riddle 5 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">5</div>
+              <div class="riddle-emoji">🍄 🏃‍♂️ 👑 🐢</div>
+              <div class="riddle-category">Game</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer5')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer5">
+                Super Mario Bros. Wonder
+              </div>
+            </div>
+          </div>
+
+          <!-- Riddle 6 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">6</div>
+              <div class="riddle-emoji">🕸️ 🕷️ 2️⃣ 🌌</div>
+              <div class="riddle-category">Game</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer6')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer6">Spider-Man 2</div>
+            </div>
+          </div>
+
+          <!-- Riddle 7 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">7</div>
+              <div class="riddle-emoji">🏰 👑 ⚔️ 🐉</div>
+              <div class="riddle-category">TV Show</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer7')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer7">House of the Dragon</div>
+            </div>
+          </div>
+
+          <!-- Riddle 8 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">8</div>
+              <div class="riddle-emoji">🧙‍♂️ 💍 ⚔️ 🌋</div>
+              <div class="riddle-category">TV Show</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer8')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer8">The Rings of Power</div>
+            </div>
+          </div>
+
+          <!-- Riddle 9 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">9</div>
+              <div class="riddle-emoji">🤠 🌵 🔫 🐎</div>
+              <div class="riddle-category">Game</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer9')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer9">Red Dead Redemption</div>
+            </div>
+          </div>
+
+          <!-- Riddle 10 -->
+          <div class="riddle">
+            <div class="riddle-header">
+              <div class="riddle-number">10</div>
+              <div class="riddle-emoji">🦊 🐺 🏛️ 🎭</div>
+              <div class="riddle-category">Anime</div>
+            </div>
+            <div class="riddle-content">
+              <div class="riddle-hint">
+                Try to guess from the emoji sequence!
+              </div>
+              <button class="reveal-btn" onclick="toggleAnswer('answer10')">
+                Reveal Answer
+              </button>
+              <div class="riddle-answer" id="answer10">Spy x Family</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center">
+          <button class="btn btn-primary">Load More Riddles</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="section">
+      <div class="container">
+        <h2 class="section-title">Riddle Categories</h2>
+
+        <!-- Categories content here -->
+      </div>
+    </section>
+
+    <section id="how-to-play" class="section">
+      <div class="container">
+        <h2 class="section-title">How to Play</h2>
+
+        <!-- How to play content here -->
+      </div>
+    </section>
+
+    <footer class="footer">
+      <!-- Footer content here -->
+    </footer>
+
+    <!-- JavaScript for toggling answer visibility -->
+    <script>
+      function toggleAnswer(id) {
+        const answerElement = document.getElementById(id);
+        if (answerElement.style.display === "block") {
+          answerElement.style.display = "none";
+        } else {
+          answerElement.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>
